@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# ===== SCRIPT VARS =====
+GODOT_VERSION="4"
+NODE_VERSION="v22.9.0"
+
 #===== Install Repos and GPG Keys =====#
 echo "Getting GPG keys and adding external repositoreis ..."
 # Neovim
@@ -13,12 +17,14 @@ add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ jammy main'
 wget -qO - https://hub.unity3d.com/linux/keys/public | gpg --dearmor | sudo tee /usr/share/keyrings/Unity_Technologies_ApS.gpg > /dev/null
 sh -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
 
-# ===== WGET DOWNLOADS ======
+mkdir /tmp/uraxii_setup
+
+# ===== DOWNLOAD PACKAGES ======
 echo "Downloading internet packages ..."
 echo "Node.js ..."
-wget -O /usr/local/src/node-latest.tar.gz https://nodejs.org/dist/latest/node-v22.9.0.tar.gz # Node.js
-echo "Neovim ..."
-wget -O /tmp/neovim_config.zip https://github.com/Uraxii/kickstart.nvim/archive/refs/heads/master.zip # Neovim
+wget -O /tmp/uraxii_setup/node-$NODE_VERSION.tar.gz https://nodejs.org/dist/latest/node-$NODE_VERSION.tar.gz # Node.js
+echo "Neovim config..."
+wget -O /tmp/uraxii_setup/neovim_config.zip https://github.com/Uraxii/kickstart.nvim/archive/refs/heads/master.zip # Neovim
 
 # ===== INSTALL APPLICATIONS =====
 echo "Running apt-get update ..."
@@ -28,31 +34,39 @@ apt-get upgrade
 
 echo "Installing applications ..."
 echo "Unzip"
-apt-get install unzip
+apt-get install unzip # Used for zip files
 echo "build-essential ..."
-apt-get install build-essential # Need for Make, C compiler, etc.
+apt-get install build-essential # Need for Make, C compiler, etc
 echo "Discord ..."
-snap install discord
+snap install discord # Discord
 echo "Git ..."
 apt install git # Git
+echo "gnome-shell-extension-manager ..."
+apt install gnome-shell extension-manager
+echo "Godot ..."
+snap install godot-$GODOT_VERSION # Godot
 echo "Neovim ..."
 apt install neovim # Neovim
-mkdir ~/.config/nvim
+echo "Python venv ..."
+apt install python3.12-venv
 echo "Steam ..."
 snap install steam # Steam
 echo "Unity Hub ..."
 apt-get install unityhub # Unity Hub
 echo "Wine ..."
 sudo apt install --install-recommends winehq-stable # Wine
+echo "Xsel ..."
+apt install xsel # Lets Nevim access the clipboard
 
 # Node.js Install
 echo "Node.js ..."
-tar -xvzf /usr/local/src/node-latest
-cd /usr/local/src/node-latest
-./configure
-make
-sudo make install
-which node
-cd -
-rm /usr/local/src/node-latest
-rm /usr/local/src/node-latest.tar.gz
+apt isntall nodejs
+
+# NOT WORKING?
+#tar -xvzf /tmp/uraxii_setup/node-$NODE_VERSION.tar.gz --directory /tmp/uraxii_setup
+#cd /tmp/uraxii_setup/node-$NODE_VERSION
+#./configure
+#make
+#sudo make install
+#which node
+#cd -
