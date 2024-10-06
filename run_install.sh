@@ -56,7 +56,7 @@ apt-get install unityhub # Unity Hub
 echo "Wine ..."
 sudo apt install --install-recommends winehq-stable # Wine
 echo "Xsel ..."
-apt install xsel # Lets Nevim access the clipboard
+apt install xsel # Lets Neovim access the clipboard
 
 # Node.js Install
 echo "Node.js ..."
